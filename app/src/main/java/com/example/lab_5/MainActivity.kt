@@ -9,13 +9,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -26,11 +29,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,12 +68,16 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Greeting(name: String) {
-    var selectedOption by remember { mutableStateOf(0) }
-    var num by remember {
+    var selectedOption by rememberSaveable { mutableStateOf(0) }
+    var num by rememberSaveable {
         mutableStateOf(0)
     }
-
-    Box(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
+    var result by rememberSaveable { mutableStateOf(0) }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             Row(
                 modifier = Modifier.fillMaxWidth(.75F),
@@ -78,7 +87,13 @@ fun Greeting(name: String) {
                 Text(text = "Стоимость", style = TextStyle(fontSize = 25.sp))
             }
         }
-        Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(.3F).padding(vertical = 30.dp).background(Color.Cyan)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(.3F)
+                .padding(vertical = 30.dp)
+
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -161,11 +176,21 @@ fun Greeting(name: String) {
                 }
             }
         }
-        Column(modifier = Modifier.padding(vertical = 200.dp).fillMaxWidth().fillMaxHeight(.17F).background(Color.Green)){
-            Row(modifier = Modifier.fillMaxWidth(),
+        Column(
+            modifier = Modifier
+                .padding(vertical = 200.dp)
+                .fillMaxWidth()
+                .fillMaxHeight(.17F)
+
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Text(text = "Количество:", style = TextStyle(fontSize = 25.sp))
+                Text(
+                    text = "Количество:", style = TextStyle(fontSize = 25.sp), modifier = Modifier
+                        .offset(y = (10).dp)
+                )
                 TextField(
                     value = if (num == 0) "" else num.toString(),
                     onValueChange = { input ->
@@ -180,9 +205,55 @@ fun Greeting(name: String) {
                 )
             }
         }
+        Column(
+            modifier = Modifier
+                .padding(vertical = 270.dp)
+                .fillMaxWidth()
+                .fillMaxHeight(.25F)
+
+        ) {
+
+            Button(
+                onClick = {
+                    result = num * getPrice(selectedOption)
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(text = "Рассчитать", style = TextStyle(fontSize = 25.sp))
+            }
+        }
+        Column(
+            modifier = Modifier
+                .padding(vertical = 330.dp)
+                .fillMaxWidth()
+                .fillMaxHeight(.35F)
+
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+
+                Text(
+                    text = "Оплатить рублей: $result",
+                    style = TextStyle(fontSize = 25.sp)
+                )
+
+            }
+        }
     }
 
+
 }
+
+    fun getPrice(selectedOption: Int): Int {
+        return when (selectedOption) {
+            0 -> 100
+            1 -> 150
+            2 -> 300
+            else -> 0
+        }
+    }
 
 
 
