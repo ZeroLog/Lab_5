@@ -1,6 +1,7 @@
 package com.example.lab_5
 
 import android.os.Bundle
+import android.service.autofill.OnClickAction
 import android.widget.HorizontalScrollView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -102,7 +103,8 @@ fun Greeting(name: String) {
                 Box(Modifier.weight(0.2f)) {
                     RadioButton(
                         selected = selectedOption == 0,
-                        onClick = { selectedOption = 0 },
+                        onClick = { selectedOption = 0
+                            result = num * getPrice(selectedOption)},
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
@@ -129,7 +131,8 @@ fun Greeting(name: String) {
                 Box(Modifier.weight(0.2f)) {
                     RadioButton(
                         selected = selectedOption == 1,
-                        onClick = { selectedOption = 1 },
+                        onClick = { selectedOption = 1
+                            result = num * getPrice(selectedOption)},
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
@@ -156,8 +159,10 @@ fun Greeting(name: String) {
                 Box(Modifier.weight(0.2f)) {
                     RadioButton(
                         selected = selectedOption == 2,
-                        onClick = { selectedOption = 2 },
-                        modifier = Modifier.align(Alignment.Center)
+                        onClick = { selectedOption = 2
+                            result = num * getPrice(selectedOption) },
+                        modifier = Modifier.align(Alignment.Center),
+
                     )
                 }
                 Box(Modifier.weight(0.4f)) {
